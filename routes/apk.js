@@ -4,7 +4,7 @@ var path = require('path');
 
 /* GET apk files. */
 router.get('/:apk', function(req, res, next) {
-  var pwd =(path.dirname(require.main.filename || process.mainModule.filename));
+  var appRoot =(path.dirname(require.main.filename || process.mainModule.filename));
   var filename = path.resolve(appRoot, '/../public/files/') + req.params.apk;
 
   fs.stat(filename, (err)=>{

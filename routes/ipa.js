@@ -6,7 +6,7 @@ path = require('path');
 /* GET ios files. */
 router.get('/:ipa', function(req, res, next) {
   
-  var pwd =(path.dirname(require.main.filename || process.mainModule.filename));
+  var appRoot =(path.dirname(require.main.filename || process.mainModule.filename));
   var filename = path.resolve(appRoot, '/../public/files/') + req.params.ipa;
 
   fs.stat(filename, (err)=>{
