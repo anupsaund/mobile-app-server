@@ -28,7 +28,7 @@ app.use('/', index);
 app.use('/ipa', ipa);
 app.use('/plist', plist);
 app.use('/apk', apk);
-app.use('/cer', express.static(__dirname + "/bin/"));
+app.use('/cer', express.static(__dirname + "/public/cer"));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

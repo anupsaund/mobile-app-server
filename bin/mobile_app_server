@@ -46,6 +46,15 @@ function mainProgramLogic(){
   })
   .catch(err => console.error(err))
 
+  symlinkDir(program.ssl, path.resolve(appRoot + '/public/cer'))
+  .then(result => {
+    return symlinkDir(program.ssl, path.resolve(appRoot +'/public/cer'))
+  })
+  .then(result => { 
+  })
+  .catch(err => console.error(err))
+
+
   var privateKey = fs.readFileSync( program.ssl + '/server.key' );
   var certificate = fs.readFileSync( program.ssl + '/server.crt' );
 
