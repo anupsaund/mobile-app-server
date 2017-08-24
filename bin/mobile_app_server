@@ -1,0 +1,108 @@
+#!/usr/bin/env node
+
+var app = require('../app');
+var debug = require('debug')('apk-ios-server:server');
+var https = require('https');
+var fs = require('fs');
+var exit = process.exit;
+var program = require('commander');
+var pkg = require('../package.json');
+var version = pkg.version;
+var symlinkDir = require('symlink-dir');
+var path = require('path');
+var appRoot = require('app-root-path');
+
+program
+.version(version)
+.usage('[files] [ssl]')
+.option('-p, --port [value]', 'port')
+.option('-f, --files <files>', 'path to ipa/apk files')
+.option('-s, --ssl <ssl>', 'path to SSL .key and .crt')
+.parse(process.argv);
+
+
+if(typeof program.files == "undefined"){
+  console.log('Files path option must be specified, see --help for more details')
+  exit()
+}
+
+if(typeof program.ssl == "undefined"){
+  console.log('SSL path option must be specified, see --help for more details')
+  exit()
+}
+
+mainProgramLogic();
+
+function mainProgramLogic(){
+
+  var port = normalizePort(program.port || '3001');
+  app.set('port', port);
+
+  symlinkDir(program.files, path.resolve(appRoot + '/public/files'))
+  .then(result => {
+    return symlinkDir(program.files, path.resolve(appRoot +'/public/files'))
+  })
+  .then(result => { 
+  })
+  .catch(err => console.error(err))
+
+  var privateKey = fs.readFileSync( program.ssl + '/server.key' );
+  var certificate = fs.readFileSync( program.ssl + '/server.crt' );
+
+  var server = https.createServer({key: privateKey, cert: certificate},app);
+
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+
+  console.log('Server listening on port: ' + port);
+  console.log('SSL certificates loaded from: ' + program.ssl);
+  console.log('APK/IPA files are being served from: ' + program.files);
+  
+  function normalizePort(val) {
+    var port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+      return val;
+    }
+
+    if (port >= 0) {
+      return port;
+    }
+
+    return false;
+  }
+
+  function onError(error) {
+    if (error.syscall !== 'listen') {
+      throw error;
+    }
+
+    var bind = typeof port === 'string'
+      ? 'Pipe ' + port
+      : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+      case 'EACCES':
+        console.error(bind + ' requires elevated privileges');
+        process.exit(1);
+        break;
+      case 'EADDRINUSE':
+        console.error(bind + ' is already in use');
+        process.exit(1);
+        break;
+      default:
+        throw error;
+    }
+  }
+
+  function onListening() {
+    
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+      ? 'pipe ' + addr
+      : 'port ' + addr.port;
+    debug('Listening on ' + bind);
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "mobile-app-server",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node ./bin/mobile_app_server"
+  },
+  "bin": {
+    "apk-ipa-server": "bin/mobile_app_server"
+  },
+  "dependencies": {
+    "app-root-path": "^2.0.1",
+    "body-parser": "~1.17.1",
+    "commander": "^2.11.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "express": "~4.15.2",
+    "file-extension": "^3.1.2",
+    "hbs": "~4.0.1",
+    "isomorphic-pkg-reader": "^1.1.21",
+    "morgan": "~1.8.1",
+    "node-dir": "^0.1.17",
+    "serve-favicon": "~2.4.2",
+    "symlink-dir": "^1.1.0",
+    "underscore": "^1.8.3"
+  },
+  "keywords": [
+    "ipa", "apk", ".ipa", ".apk", "provisioning", "server", "mobile"
+  ],
+  "bugs": {
+    "url": "https://github.com/anupsaund/mobile-app-server/issues",
+    "email": "anup@anupsaund.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anupsaund/mobile-app-server.git"
+  },
+  "author": "Anup Saund <anup@anupsaund.com> (http://www.anupsaund.com)",
+  "license": "MIT"
+}

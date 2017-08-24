@@ -1,0 +1,84 @@
+
+
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="#">{{title}}</a>
+</nav>
+
+<div class="container-fluid">
+
+  <div class="jumbotron">
+      <div class="container">
+        <h1>APK and IPA File Server</h1>
+        <p><a href="{{cerLink}}">Download Cetificate</a> for self-certified SSL servers</p>
+        <br />
+        <button class="btn btn-primary" type="button"> Total Apps <span class="badge">{{list.length}}</span></button>
+      </div>
+    </div>
+  <div class="row">   
+    <main class="col-sm-12 ml-sm-auto col-md-12 pt-3" role="main">
+      {{#each list}}
+        {{#if apple}}
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title"> <i class="fa fa-apple"></i>  {{title}}</h3>
+            </div>
+            <div class="panel-body">
+              <div class="row">   
+                <div class="col-sm-8 ml-sm-auto col-md-8"> 
+              
+                  <p><i class="fa fa-gift"></i> Package : {{bundleidentifier}}</p>
+                  <p><i class="fa fa-code-fork"></i> Version : {{bundleversion}}</p>
+                  <p><i class="fa fa-user-o"></i> Profile : {{profile}}</p>
+                  
+                </div>
+
+                <div class="col-sm-4 ml-sm-auto col-md-4"> 
+                  <div class="qrcode" id="qrcode{{bundleidentifier}}"></div>
+                  <p><a class="btn btn-primary dl" role="button" href="itms-services://?action=download-manifest&url={{downloadurl}}"><i class="fa fa-cloud-download"></i> Download</a></p>  
+        
+                  <script type="text/javascript">
+                        new QRCode(document.getElementById("qrcode{{bundleidentifier}}"), 
+                        {text:
+                        "itms-services://?action=download-manifest&url={{downloadurl}}",
+                        height:120,
+                        width:120
+                        });
+                  </script>
+                </div>
+              </div>
+            </div>
+          </div>
+        {{else}}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title"><i class="fa fa-android"></i>  {{title}}</h3>
+            </div>
+            <div class="panel-body">
+               <div class="row">   
+                <div class="col-sm-8 ml-sm-auto col-md-8"> 
+                  <p><i class="fa fa-gift"></i> Package :  {{package}}</p>
+                  <p><i class="fa fa-code-fork"></i> Version : {{versionName}}</p>
+                </div>
+                <div class="col-sm-4 ml-sm-auto col-md-4"> 
+                  <div class="qrcode" id="qrcode{{package}}"></div>
+                  <p><a class="btn btn-primary dl" role="button" href="{{downloadurl}}"><i class="fa fa-cloud-download"></i> Download </a></p>
+                  
+                  <script type="text/javascript">
+                        new QRCode(document.getElementById("qrcode{{package}}"), {
+                          text: "{{downloadurl}}",
+                          height: 120,
+                          width: 120
+                        });
+                  </script>
+                </div>
+               </div>
+            </div>
+          </div>    
+        {{/if}}
+      {{/each}}
+    </main>
+  </div>
+</div>
+  
