@@ -46,9 +46,9 @@ function mainProgramLogic(){
   })
   .catch(err => console.error(err))
 
-  symlinkDir(program.ssl, path.resolve(appRoot + '/public/cer'))
+  symlinkDir(path.resolve(program.ssl), path.resolve(appRoot + '/public/cer'))
   .then(result => {
-    return symlinkDir(program.ssl, path.resolve(appRoot +'/public/cer'))
+    return symlinkDir(path.resolve(program.ssl), path.resolve(appRoot +'/public/cer'))
   })
   .then(result => { 
   })
