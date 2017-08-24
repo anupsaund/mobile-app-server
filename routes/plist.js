@@ -5,7 +5,9 @@ path = require('path');
 
 router.get('/:ipa', function(req, res) {
   
-  var fileName = path.join(__dirname, '..', 'public/files') + '/' + req.params.ipa;
+  var appRoot =(path.dirname(require.main.filename || process.mainModule.filename));
+  
+  var fileName = path.resolve(appRoot, '/../public/files/') + req.params.ipa;
 
     fs.readFile(fileName , function(err, data) {
         if (err)

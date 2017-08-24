@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 var app = require('../app');
-
 var https = require('https');
 var fs = require('fs');
 var exit = process.exit;
@@ -10,7 +9,6 @@ var pkg = require('../package.json');
 var version = pkg.version;
 var symlinkDir = require('symlink-dir');
 var path = require('path');
-var appRoot = require('app-root-path');
 
 program
 .version(version)
@@ -38,17 +36,19 @@ function mainProgramLogic(){
   var port = normalizePort(program.port || '3001');
   app.set('port', port);
 
-  symlinkDir(program.files, path.resolve(__dirname + '../public/files'))
+  var pwd =(path.dirname(require.main.filename || process.mainModule.filename));
+
+  symlinkDir(program.files, path.resolve(pwd + '/../public/files'))
   .then(result => {
-    return symlinkDir(program.files, path.resolve(__dirname +'../public/files'))
+    return symlinkDir(program.files, path.resolve(pwd +'/../public/files'))
   })
   .then(result => { 
   })
   .catch(err => console.error(err))
 
-  symlinkDir(path.resolve(program.ssl), path.resolve(__dirname + '../public/cer'))
+  symlinkDir(path.resolve(program.ssl), path.resolve(pwd + '/../public/cer'))
   .then(result => {
-    return symlinkDir(path.resolve(program.ssl), path.resolve(__dirname +'../public/cer'))
+    return symlinkDir(path.resolve(program.ssl), path.resolve(pwd +'/../public/cer'))
   })
   .then(result => { 
   })

@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var dir = require('node-dir');
-var appRoot = require('app-root-path');
 var fs = require('fs');
 var handlebars = require('handlebars');
 var fileExt = require('file-extension');
@@ -26,7 +25,9 @@ router.get('/', function(req, res, next) {
   let dwList = new Array();
   let port = req.app.settings.port;
 
-  dir.readFiles(appRoot +"/public/files/", {
+  var appRoot =(path.dirname(require.main.filename || process.mainModule.filename));
+
+  dir.readFiles(appRoot +"/../public/files/", {
     match: /.*\.(ipa|apk)/,
     exclude: /^\./
     }, (err, content, filename, next) => {
@@ -71,11 +72,11 @@ router.get('/', function(req, res, next) {
                 'port': port
               }
 
-              fs.readFile(appRoot +"/views/plist.hbs", 'utf-8', (error, source) =>{
+              fs.readFile(appRoot +"/../views/plist.hbs", 'utf-8', (error, source) =>{
                 let template = handlebars.compile(source);
                 let html = template(data);
   
-                  fs.writeFile(appRoot + "/public/files/" + pkgInfo.CFBundleDisplayName + ".plist", html, (err) => {
+                  fs.writeFile(appRoot + "/../public/files/" + pkgInfo.CFBundleDisplayName + ".plist", html, (err) => {
                     if (err) throw err;
                     console.log('plist written');
                     next();

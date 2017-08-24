@@ -1,6 +1,6 @@
 {
   "name": "mobile-app-server",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "scripts": {
     "start": "node ./bin/mobile_app_server"
   },
@@ -8,7 +8,6 @@
     "mobile-app-server": "bin/mobile_app_server"
   },
   "dependencies": {
-    "app-root-path": "^2.0.1",
     "body-parser": "~1.17.1",
     "commander": "^2.11.0",
     "cookie-parser": "~1.4.3",
