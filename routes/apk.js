@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
+var fs = require('fs');
 
 /* GET apk files. */
 router.get('/:apk', function(req, res, next) {
