@@ -12,7 +12,6 @@
     "body-parser": "~1.17.1",
     "commander": "^2.11.0",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.3",
     "express": "~4.15.2",
     "file-extension": "^3.1.2",
     "hbs": "~4.0.1",
