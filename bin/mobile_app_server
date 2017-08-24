@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var app = require('../app');
-var debug = require('debug')('apk-ios-server:server');
+
 var https = require('https');
 var fs = require('fs');
 var exit = process.exit;
@@ -103,6 +103,5 @@ function mainProgramLogic(){
     var bind = typeof addr === 'string'
       ? 'pipe ' + addr
       : 'port ' + addr.port;
-    debug('Listening on ' + bind);
   }
 }
