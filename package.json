@@ -1,11 +1,11 @@
 {
   "name": "mobile-app-server",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "start": "node ./bin/mobile_app_server"
   },
   "bin": {
-    "apk-ipa-server": "bin/mobile_app_server"
+    "mobile-app-server": "bin/mobile_app_server"
   },
   "dependencies": {
     "app-root-path": "^2.0.1",
