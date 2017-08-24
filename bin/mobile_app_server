@@ -38,17 +38,17 @@ function mainProgramLogic(){
   var port = normalizePort(program.port || '3001');
   app.set('port', port);
 
-  symlinkDir(program.files, path.resolve(appRoot + '/public/files'))
+  symlinkDir(program.files, path.resolve(__dirname + '../public/files'))
   .then(result => {
-    return symlinkDir(program.files, path.resolve(appRoot +'/public/files'))
+    return symlinkDir(program.files, path.resolve(__dirname +'../public/files'))
   })
   .then(result => { 
   })
   .catch(err => console.error(err))
 
-  symlinkDir(path.resolve(program.ssl), path.resolve(appRoot + '/public/cer'))
+  symlinkDir(path.resolve(program.ssl), path.resolve(__dirname + '../public/cer'))
   .then(result => {
-    return symlinkDir(path.resolve(program.ssl), path.resolve(appRoot +'/public/cer'))
+    return symlinkDir(path.resolve(program.ssl), path.resolve(__dirname +'../public/cer'))
   })
   .then(result => { 
   })
