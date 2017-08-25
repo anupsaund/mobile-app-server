@@ -1,6 +1,7 @@
 {
   "name": "mobile-app-server",
-  "version": "0.0.11",
+  "version": "0.0.12",
+  "description": "Serve Android and Apple applications to Mobile Devices.",
   "scripts": {
     "start": "node ./bin/mobile_app_server"
   },
@@ -32,6 +33,7 @@
     "type": "git",
     "url": "https://github.com/anupsaund/mobile-app-server.git"
   },
+  "homepage": "https://github.com/anupsaund/mobile-app-server",
   "author": "Anup Saund <anup@anupsaund.com> (http://www.anupsaund.com)",
   "license": "MIT"
 }
