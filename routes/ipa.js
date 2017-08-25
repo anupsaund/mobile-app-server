@@ -1,13 +1,16 @@
 var express = require('express'),
 router = express.Router(),
 fs = require('fs')
-path = require('path');
+path = require('path'),
+appRoot = 
+path.resolve(
+  (path.dirname(require.main.filename || process.mainModule.filename),
+  "."));
 
-/* GET ios files. */
+/* GET iOS files. */
 router.get('/:ipa', function(req, res, next) {
   
-  var appRoot =(path.dirname(require.main.filename || process.mainModule.filename));
-  var filename = path.resolve(appRoot, '/../public/files/') + req.params.ipa;
+  var filename = path.resolve(appRoot, '/public/files') + '/' + req.params.ipa;
 
   fs.stat(filename, (err)=>{
     var readStream = fs.createReadStream(filename);
