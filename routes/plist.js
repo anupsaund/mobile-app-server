@@ -2,14 +2,11 @@ var express = require('express'),
 router = express.Router(),
 fs = require('fs'),
 path = require('path'),
-appRoot = 
-path.resolve(
-  (path.dirname(require.main.filename || process.mainModule.filename),
-  "."));
+appRoot =(path.dirname(require.main.filename || process.mainModule.filename));
 
 router.get('/:plist', function(req, res) {
   
-  var filename = path.resolve(appRoot + '/public/files') +"/"+ req.params.plist;
+  var filename = path.resolve(appRoot + '/../public/files') + "/"+ req.params.plist;
 
     fs.readFile(fileName , function(err, data) {
         if (err)
