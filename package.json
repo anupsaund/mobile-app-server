@@ -1,6 +1,6 @@
 {
   "name": "mobile-app-server",
-  "version": "0.0.12",
+  "version": "1.0.0",
   "description": "Serve Android and Apple applications to Mobile Devices.",
   "scripts": {
     "start": "node ./bin/mobile_app_server"
@@ -8,6 +8,7 @@
   "bin": {
     "mobile-app-server": "bin/mobile_app_server"
   },
+  "main": "bin/mobile_app_server",
   "dependencies": {
     "body-parser": "~1.17.1",
     "commander": "^2.11.0",
@@ -18,12 +19,19 @@
     "isomorphic-pkg-reader": "^1.1.21",
     "morgan": "~1.8.1",
     "node-dir": "^0.1.17",
+    "node-watch": "^0.5.5",
     "serve-favicon": "~2.4.2",
     "symlink-dir": "^1.1.0",
     "underscore": "^1.8.3"
   },
   "keywords": [
-    "ipa", "apk", ".ipa", ".apk", "provisioning", "server", "mobile"
+    "ipa",
+    "apk",
+    ".ipa",
+    ".apk",
+    "provisioning",
+    "server",
+    "mobile"
   ],
   "bugs": {
     "url": "https://github.com/anupsaund/mobile-app-server/issues",

@@ -1,14 +1,28 @@
 #!/usr/bin/env node
 
-var app = require('../app');
-var https = require('https');
-var fs = require('fs');
-var exit = process.exit;
-var program = require('commander');
-var pkg = require('../package.json');
-var version = pkg.version;
-var symlinkDir = require('symlink-dir');
-var path = require('path');
+const 
+  app         = require('../app'),
+  https       = require('https'),
+  fs          = require('fs'),
+  exit        = process.exit,
+  program     = require('commander'),
+  pkg         = require('../package.json'),
+  version     = pkg.version,
+  symlinkDir  = require('symlink-dir'),
+  path        = require('path'),
+  PkgReader   = require('isomorphic-pkg-reader'),
+  watch       = require('node-watch'),
+  handlebars  = require('handlebars'),
+  underscore  = require('underscore'),
+  ipAddress   =  underscore
+  .chain(require('os').networkInterfaces())
+  .values()
+  .flatten()
+  .find(function(iface) {
+    return iface.family === 'IPv4' && iface.internal === false;
+  })
+  .value()
+  .address;
 
 program
 .version(version)
@@ -16,7 +30,7 @@ program
 .option('-p, --port [value]', 'port')
 .option('-f, --files <files>', 'path to ipa/apk files')
 .option('-s, --ssl <ssl>', 'path to SSL .key and .crt')
-.parse(process.argv);
+.parse(process.argv)
 
 
 if(typeof program.files == "undefined"){
@@ -29,88 +43,135 @@ if(typeof program.ssl == "undefined"){
   exit()
 }
 
-mainProgramLogic();
+mainProgramLogic()
 
 function mainProgramLogic(){
 
-  var port = normalizePort(program.port || '3001');
-  app.set('port', port);
+  var port = normalizePort(program.port || '3001')
+  app.set('port', port)
 
-  var pwd =(path.dirname(require.main.filename || process.mainModule.filename));
+  var pwd =(path.dirname(require.main.filename || process.mainModule.filename))
 
-  symlinkDir(program.files, path.resolve(pwd + '/../public/files'))
+  symlinkDir(program.files, path.resolve(`${pwd}/../public/files`))
   .then(result => {
-    return symlinkDir(program.files, path.resolve(pwd +'/../public/files'))
-  })
-  .then(result => { 
+    return symlinkDir(program.files, path.resolve(`${pwd}/../public/files`))
   })
   .catch(err => console.error(err))
 
-  symlinkDir(path.resolve(program.ssl), path.resolve(pwd + '/../public/cer'))
+  symlinkDir(path.resolve(program.ssl), path.resolve(`${pwd}/../public/cer`))
   .then(result => {
-    return symlinkDir(path.resolve(program.ssl), path.resolve(pwd +'/../public/cer'))
-  })
-  .then(result => { 
+    return symlinkDir(path.resolve(program.ssl), path.resolve(`${pwd}/../public/cer`))
   })
   .catch(err => console.error(err))
 
 
-  var privateKey = fs.readFileSync( program.ssl + '/server.key' );
-  var certificate = fs.readFileSync( program.ssl + '/server.crt' );
+  var privateKey = fs.readFileSync( `${program.ssl}/server.key` )
+  var certificate = fs.readFileSync( `${program.ssl}/server.crt` )
 
-  var server = https.createServer({key: privateKey, cert: certificate},app);
+  var server = https.createServer({key: privateKey, cert: certificate},app)
 
-  server.listen(port);
-  server.on('error', onError);
-  server.on('listening', onListening);
+  server.listen(port)
+  server.on('error', onError)
+  server.on('listening', onListening)
 
-  console.log('Server listening on port: ' + port);
-  console.log('SSL certificates loaded from: ' + program.ssl);
-  console.log('APK/IPA files are being served from: ' + program.files);
+  console.log(`Server listening on port: ${port}`)
+  console.log(`SSL certificates loaded from: ${program.ssl}`)
+  console.log(`APK/IPA files are being served from: ${program.files}`)
   
   function normalizePort(val) {
-    var port = parseInt(val, 10);
+    let port = parseInt(val, 10)
 
-    if (isNaN(port)) {
-      return val;
-    }
+    if (isNaN(port)) return val
 
-    if (port >= 0) {
-      return port;
-    }
+    if (port >= 0) return port
 
-    return false;
+    return false
   }
 
   function onError(error) {
     if (error.syscall !== 'listen') {
-      throw error;
+      throw error
     }
 
     var bind = typeof port === 'string'
       ? 'Pipe ' + port
-      : 'Port ' + port;
+      : 'Port ' + port
 
     // handle specific listen errors with friendly messages
     switch (error.code) {
       case 'EACCES':
-        console.error(bind + ' requires elevated privileges');
-        process.exit(1);
-        break;
+        console.error(bind + ' requires elevated privileges')
+        process.exit(1)
+        break
       case 'EADDRINUSE':
-        console.error(bind + ' is already in use');
-        process.exit(1);
-        break;
+        console.error(bind + ' is already in use')
+        process.exit(1)
+        break
       default:
-        throw error;
+        throw error
     }
   }
 
   function onListening() {
-    
-    var addr = server.address();
-    var bind = typeof addr === 'string'
+    let addr = server.address()
+    let bind = typeof addr === 'string'
       ? 'pipe ' + addr
-      : 'port ' + addr.port;
+      : 'port ' + addr.port
   }
+
+  watch(program.files,{ filter: /\.ipa$/ }, (evt, name) =>{
+    if (evt == 'update') {
+       console.log('updated file', name)
+       generatePlist(name)
+    }
+   
+    if (evt == 'remove') {
+      if(path.extname(name) == '.ipa'){
+        fs.unlink(name + '.plist',(err)=>{
+          console.log('removed ipa and plist for ', name)  
+        })
+      }else{
+        console.log('removed file', name)
+      }
+    }
+  })
+
+  function generatePlist(ipaFile){
+
+    fs.open(ipaFile, 'r', (err, fd) => {
+      if (err) throw err
+
+      var reader = new PkgReader(ipaFile, "ipa", { searchResource: true })
+      
+      reader.parse(function(err, pkgInfo) {
+        if (err) {
+          return err.stack
+        }
+
+        let data = {}
+
+          data = {
+            'bundleidentifier': pkgInfo.CFBundleIdentifier,
+            'bundleversion': pkgInfo.CFBundleVersion,
+            'title': pkgInfo.CFBundleDisplayName,
+            'subtitle': pkgInfo.CFBundleName,
+            'filepath': `https://${ipAddress}:${server.address().port}/ipa/${path.basename(ipaFile)}`
+          }
+          let source = fs.readFileSync(`${appRoot}/../views/plist.hbs`, 'utf-8')
+          let template = handlebars.compile(source)
+          let html = template(data)
+
+          var target = path.resolve(appRoot + "/../public/files/") + "/" +path.basename(ipaFile) + ".plist"
+          
+          console.log(`Writing plist to : ${target}`)
+          
+          fs.writeFile(target, html, { flag: 'w', mode: '666' }, (err) => {
+                if (err) throw err
+                
+                  console.log(`plist written for new file ${target}`)
+          })
+
+        })
+      })
+    }
 }

@@ -1,25 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var path = require('path');
-var fs = require('fs');
-var appRoot =(path.dirname(require.main.filename || process.mainModule.filename));
+const
+    express   = require('express'),
+    router = express.Router(),
+    path = require('path'),
+    fs = require('fs'),
+    appRoot =(path.dirname(require.main.filename || process.mainModule.filename))
 
-/* GET apk files. */
+/* GET apk file. */
 router.get('/:apk', function(req, res, next) {
+  res.download(path.resolve(appRoot + '/../public/files') + "/"+ req.params.apk)  
+})
 
-  var filename = path.resolve(appRoot + '/../public/files') + "/"+ req.params.apk;
-  
-  fs.stat(filename, (err)=>{
-    var readStream = fs.createReadStream(filename);
-
-    readStream.on('open', function() {
-      readStream.pipe(res);
-    });
-
-    readStream.on('error', function(err) {
-      res.end(err);
-    });
-  });
-});
-
-module.exports = router;
+module.exports = router

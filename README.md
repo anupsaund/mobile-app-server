@@ -1,14 +1,14 @@
 # Mobile App Server
 
+  > Serve Google Android and Apple iOS applications to Mobile Devices.
+
+## Main Page Screenshot
+
 ![top of page](readme_files/TopPage.png "Preview")
 
-## Example
+## Example List
 
 ![Example](readme_files/Example.png "Preview")
-
-## Purpose
- 
- > Serve Android and Apple applications to Mobile Devices.
 
 ### Requires
 
@@ -86,8 +86,12 @@ node mobile-app-server -f /to/files/path/ -s /to/certs/path -p 8080
 
 ### Future Roadmap
 
-1. Drag and Drop app addition via Web Interface.
+1. Drag and Drop app addition of files via Web Interface.
 
 2. App Icons.
 
 3. Extended package information.
+
+### Bugs & Feature Requests
+
+Issues and feature requests can be logged over at github on https://github.com/anupsaund/mobile-app-server/issues

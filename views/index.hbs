@@ -19,27 +19,23 @@
     <main class="col-sm-12 ml-sm-auto col-md-12 pt-3" role="main">
       {{#each list}}
         {{#if apple}}
-
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title"> <i class="fa fa-apple"></i>  {{title}}</h3>
+              <h3 class="panel-title"> <i class="fa fa-apple"></i>  {{title}} ({{original_filename}})</h3>
             </div>
             <div class="panel-body">
               <div class="row">   
                 <div class="col-sm-8 ml-sm-auto col-md-8"> 
-              
                   <p><i class="fa fa-gift"></i> Package : {{bundleidentifier}}</p>
                   <p><i class="fa fa-code-fork"></i> Version : {{bundleversion}}</p>
                   <p><i class="fa fa-user-o"></i> Profile : {{profile}}</p>
-                  
                 </div>
-
                 <div class="col-sm-4 ml-sm-auto col-md-4"> 
-                  <div class="qrcode" id="qrcode{{bundleidentifier}}"></div>
+                  <div class="qrcode" id="qrcode{{original_filename}}"></div>
                   <p><a class="btn btn-primary dl" role="button" href="itms-services://?action=download-manifest&url={{downloadurl}}"><i class="fa fa-cloud-download"></i> Download</a></p>  
         
                   <script type="text/javascript">
-                        new QRCode(document.getElementById("qrcode{{bundleidentifier}}"), 
+                        new QRCode(document.getElementById("qrcode{{original_filename}}"), 
                         {text:
                         "itms-services://?action=download-manifest&url={{downloadurl}}",
                         height:120,
@@ -53,20 +49,20 @@
         {{else}}
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h3 class="panel-title"><i class="fa fa-android"></i>  {{title}}</h3>
+              <h3 class="panel-title"><i class="fa fa-android"></i>  {{title}} ({{original_filename}})</h3>
             </div>
             <div class="panel-body">
                <div class="row">   
                 <div class="col-sm-8 ml-sm-auto col-md-8"> 
-                  <p><i class="fa fa-gift"></i> Package :  {{package}}</p>
+                  <p><i class="fa fa-gift"></i> Package :  {{original_filename}}</p>
                   <p><i class="fa fa-code-fork"></i> Version : {{versionName}}</p>
                 </div>
                 <div class="col-sm-4 ml-sm-auto col-md-4"> 
-                  <div class="qrcode" id="qrcode{{package}}"></div>
+                  <div class="qrcode" id="qrcode{{original_filename}}"></div>
                   <p><a class="btn btn-primary dl" role="button" href="{{downloadurl}}"><i class="fa fa-cloud-download"></i> Download </a></p>
                   
                   <script type="text/javascript">
-                        new QRCode(document.getElementById("qrcode{{package}}"), {
+                        new QRCode(document.getElementById("qrcode{{original_filename}}"), {
                           text: "{{downloadurl}}",
                           height: 120,
                           width: 120
@@ -81,4 +77,3 @@
     </main>
   </div>
 </div>
-  
